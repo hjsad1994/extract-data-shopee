@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+@layer components {
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-md border border-gray-200/50 shadow-lg;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent;
+  }
+
+  .gradient-text-dark {
+    @apply bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300;
+  }
+  
+  .button-glow {
+    @apply relative overflow-hidden;
+  }
+
+  .glass-effect-dark {
+    @apply bg-gray-800/80 backdrop-blur-md border border-gray-700/50 shadow-lg;
+  }
+
+  .button-glow-dark {
+    @apply relative overflow-hidden;
+  }
+}

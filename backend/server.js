@@ -24,10 +24,16 @@ app.post('/api/extract', (req, res) => {
         const $ = cheerio.load(html);
         const comments = [];
         
-        // Find all comment text elements with class YNedDV
-        $('.YNedDV').each((i, elem) => {
-            const commentText = $(elem).text().trim();
-            if (commentText && commentText.length > 5) {
+        $('.meQyXP').each((i, elem) => {
+            const $clonedElem = $(elem).clone();
+            // Add a space after block-like elements to ensure separation
+            $clonedElem.find('div, p, br').after(' ');
+            let commentText = $clonedElem.text();
+            
+            // Sanitize whitespace and quotes
+            commentText = commentText.replace(/\s+/g, ' ').trim().replace(/"/g, "");
+
+            if (commentText) {
                 comments.push({ data: commentText });
             }
         });
@@ -36,7 +42,13 @@ app.post('/api/extract', (req, res) => {
             const fileExists = fs.existsSync(csvFilePath);
             const isFileEmpty = fileExists ? fs.statSync(csvFilePath).size === 0 : true;
 
-            const json2csvParser = new Parser({ fields: ['data'], header: isFileEmpty, quote: '' });
+            const parserOpts = {
+                fields: ['data'],
+                header: isFileEmpty,
+                eol: '\r\n',
+                withBOM: isFileEmpty
+            };
+            const json2csvParser = new Parser(parserOpts);
             const csv = json2csvParser.parse(comments);
 
             if (isFileEmpty) {
@@ -44,7 +56,7 @@ app.post('/api/extract', (req, res) => {
             } else {
                 // The `json2csv` library does not add a newline at the end of the parsed CSV,
                 // so we add it before appending to the file.
-                fs.appendFileSync(csvFilePath, '\n' + csv);
+                fs.appendFileSync(csvFilePath, '\r\n' + csv);
             }
         }
         

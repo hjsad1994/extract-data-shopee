@@ -74,3 +74,16 @@ The backend code is written in JavaScript (ESM). The main server logic is in `se
 ### Frontend
 
 The frontend is a standard Next.js application with TypeScript. The main page is `src/app/page.tsx`. It uses `fetch` to make API calls to the backend. State is managed with React hooks. Styling is done with Tailwind CSS.
+
+## Change Log
+
+### Extraction and CSV Generation Improvements
+
+Numerous changes were made to improve the reliability and correctness of the comment extraction and CSV generation features.
+
+#### Backend (`server.js`)
+
+*   **Extraction Logic**: The scraping logic was refined to correctly handle complex and nested HTML structures. The final implementation now targets the `.meQyXP` class for each comment, intelligently adds spaces between text from adjacent HTML elements (like `<div>` and `<p>`), and normalizes all whitespace to ensure clean, readable output.
+*   **CSV Formatting**: The CSV generation logic was significantly hardened to prevent common formatting errors, especially when opening files in Microsoft Excel.
+    *   All newline characters are replaced with spaces to ensure each comment occupies a single row.
+    *   Double quotes (`
